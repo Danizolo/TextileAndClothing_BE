@@ -1,6 +1,7 @@
 
 const { DataTypes } = require('sequelize')
 const mysqlDB = require('../config/database')
+const UserPermissionModel = require('../models/user_permissions')
 
 const sequelize = mysqlDB;
 
@@ -63,6 +64,7 @@ const User = sequelize.define(
     }
 )
 
+User.hasMany(UserPermissionModel, { foreignKey: "USER_TABLE_ID" });
 
 
 

@@ -1,6 +1,8 @@
 
 const UserModel = require('../models/users')
 const Constants = require('../utilities/constants')
+const UserPermissionModel = require('../models/user_permissions')
+const PermissionModel = require('../models/permissions')
 
 
 exports.registration = async (req, res) => {
@@ -22,7 +24,7 @@ exports.registration = async (req, res) => {
 
         if (userRegistered) {
 
-            res.status(Constants.StatusCodes.Success._created).json({
+            res.status(Constants.StatusCodes.SuccessResponse._created).json({
                 Status: 'Success',
                 Message: 'User has added Successfully...',
 
@@ -33,6 +35,55 @@ exports.registration = async (req, res) => {
                 Status: 'Error'
             })
         }
+
+    } catch (error) {
+
+    }
+}
+
+
+exports.loggingIn = async (req, res) => {
+
+    try {
+
+        const paraMeters = req.body;
+
+        const authenticateUser = await UserModel.findOne({
+            where: {
+                MAIL: paraMeters.mail,
+                CURRENT_PASSWORD: paraMeters.passWord,
+                IS_ACTIVE: Constants.Status._active
+            },
+            attributes: ['NAME', 'MAIL', 'PHONE_NUMBER', 'AGE', 'AADHAR', 'USER_TYPE', 'IS_ADMIN'],
+            include: [{
+                model: UserPermissionModel,
+                include: [{
+                    model: PermissionModel,
+                    as: 'UserPermissions',
+                    where: { IS_ACTIVE: Constants.Status._active },
+                    attributes: ['NAME']
+                }]
+            }]
+        });
+
+
+
+
+        if (authenticateUser) {
+
+            res.status(Constants.StatusCodes.SuccessResponse._ok).json({
+                Status: 'Success',
+                Message: 'Successfully Authenticated...',
+                Data: authenticateUser
+
+            })
+
+        } else {
+            res.status(Constants.StatusCodes.ClientErrorResponse._badRequest).json({
+                Status: 'Error'
+            })
+        }
+
 
     } catch (error) {
 
