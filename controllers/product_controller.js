@@ -1,0 +1,69 @@
+/**
+ * @description      :
+ * @author           : DHANUSH
+ * @group            :
+ * @created          : 14/10/2023 - 22:44:05
+ *
+ * MODIFICATION LOG
+ * - Version         : 1.0.0
+ * - Date            : 14/10/2023
+ * - Author          : DHANUSH
+ * - Modification    :
+ **/
+
+const ShirtModel = require("../models/shirts");
+const BrandsModel = require("../models/brands");
+const Constants = require("../utilities/constants");
+const ProductSizes = require("../models/product_sizes");
+const ProductColors = require("../models/product_colors");
+const Colors = require("../models/colors");
+const Sizes = require("../models/sizes");
+
+exports.getShirts = async (req, res) => {
+  try {
+    const Shirts = await ShirtModel.findAll({
+      attributes: ["NAME", "TYPE", "MATERIAL", "SLEEVE", "FIT", "QUANTITY"],
+      include: [
+        {
+          model: BrandsModel,
+          attributes: ["BRAND_NAME", "MANUFACTURER"],
+          as: "brands",
+        },
+        {
+          model: ProductSizes,
+          include: [
+            {
+              model: Sizes,
+              as: "availableSizes",
+              attributes: ["DEFAULT_SIZE"],
+            },
+          ],
+        },
+        {
+          model: ProductColors,
+          include: [
+            {
+              model: Colors,
+              as: "availableColors",
+              attributes: ["DEFAULT_COLOR"],
+            },
+          ],
+        },
+      ],
+    });
+
+    if (Shirts) {
+      return res.status(Constants.StatusCodes.SuccessResponse._ok).json({
+        Status: "Success",
+        Message: "Successfully fetched all data",
+        Data: Shirts[0],
+      });
+    } else {
+      return res
+        .status(Constants.StatusCodes.ClientErrorResponse._badRequest)
+        .json({
+          Status: "Error",
+        });
+    }
+  } catch (error) {}
+};

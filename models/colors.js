@@ -2,7 +2,7 @@
     * @description      : 
     * @author           : DHANUSH
     * @group            : 
-    * @created          : 14/10/2023 - 17:38:17
+    * @created          : 14/10/2023 - 22:24:31
     * 
     * MODIFICATION LOG
     * - Version         : 1.0.0
@@ -13,25 +13,19 @@
 
 const { DataTypes } = require('sequelize')
 const mysqlDB = require('../config/database')
-const UserPermissionModel = require('./user_permissions')
-
 const sequelize = mysqlDB;
 
-const Permissions = sequelize.define(
-    'permissions',
+const Colors = sequelize.define(
+    'colors',
     {
-        PERMISSION_ID: {
+        COLOR_ID: {
             type: DataTypes.INTEGER(11),
             primaryKey: true,
             autoIncrement: true
 
         },
-        NAME: {
+        DEFAULT_COLOR:{
             type: DataTypes.STRING(55),
-            allowNull: false
-        },
-        IS_ACTIVE: {
-            type: DataTypes.TINYINT,
             allowNull: false
         },
         createdAt: {
@@ -46,8 +40,7 @@ const Permissions = sequelize.define(
     }
 )
 
-UserPermissionModel.belongsTo(Permissions, { as: "UserPermissions", foreignKey: 'PERMISSION_TABLE_ID' });
 
 
 
-module.exports = Permissions;
+module.exports = Colors;

@@ -1,3 +1,15 @@
+/**
+    * @description      : 
+    * @author           : DHANUSH
+    * @group            : 
+    * @created          : 14/10/2023 - 23:36:22
+    * 
+    * MODIFICATION LOG
+    * - Version         : 1.0.0
+    * - Date            : 14/10/2023
+    * - Author          : DHANUSH
+    * - Modification    : 
+**/
 
 const UserModel = require('../models/users')
 const Constants = require('../utilities/constants')
@@ -71,7 +83,7 @@ exports.loggingIn = async (req, res) => {
 
         if (authenticateUser) {
 
-            res.status(Constants.StatusCodes.SuccessResponse._ok).json({
+           return res.status(Constants.StatusCodes.SuccessResponse._ok).json({
                 Status: 'Success',
                 Message: 'Successfully Authenticated...',
                 Data: authenticateUser
@@ -79,8 +91,8 @@ exports.loggingIn = async (req, res) => {
             })
 
         } else {
-            res.status(Constants.StatusCodes.ClientErrorResponse._badRequest).json({
-                Status: 'Error'
+           return res.status(Constants.StatusCodes.ClientErrorResponse._badRequest).json({
+                Status: 'Error',
             })
         }
 

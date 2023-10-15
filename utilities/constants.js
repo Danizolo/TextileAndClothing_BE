@@ -1,3 +1,15 @@
+/**
+    * @description      : 
+    * @author           : DHANUSH
+    * @group            : 
+    * @created          : 14/10/2023 - 21:43:53
+    * 
+    * MODIFICATION LOG
+    * - Version         : 1.0.0
+    * - Date            : 14/10/2023
+    * - Author          : DHANUSH
+    * - Modification    : 
+**/
 
 
 // User Types
@@ -5,6 +17,16 @@ exports.Users = {
     _masterAdmin: 1,
     _deliveryStaff: 2,
     _customer: 3
+}
+
+
+
+
+// Categories
+exports.Categories = {
+    _shirts: 1,
+    _tShirts: 2,
+    _pants: 3
 }
 
 
