@@ -66,7 +66,7 @@ const Shirts = sequelize.define("shirts", {
   },
 });
 
-Shirts.belongsTo(BrandsModel, { foreignKey: "BRAND_TABLE_ID", as: "brands" });
+Shirts.belongsTo(BrandsModel, { foreignKey: "BRAND_TABLE_ID" });
 Shirts.hasMany(ProductSizes, { foreignKey: "SHIRT_TABLE_ID" });
 Shirts.hasMany(ProductColors, { foreignKey: "SHIRT_TABLE_ID" });
 

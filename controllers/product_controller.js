@@ -18,16 +18,33 @@ const ProductSizes = require("../models/product_sizes");
 const ProductColors = require("../models/product_colors");
 const Colors = require("../models/colors");
 const Sizes = require("../models/sizes");
+const ManufacturerModel = require("../models/manufacturers");
+const PricesModel = require("../models/prices");
 
 exports.getShirts = async (req, res) => {
   try {
     const Shirts = await ShirtModel.findAll({
-      attributes: ["NAME", "TYPE", "MATERIAL", "SLEEVE", "FIT", "QUANTITY"],
+      attributes: [
+        "SHIRT_ID",
+        "NAME",
+        "TYPE",
+        "MATERIAL",
+        "SLEEVE",
+        "FIT",
+        "QUANTITY",
+      ],
       include: [
         {
           model: BrandsModel,
-          attributes: ["BRAND_NAME", "MANUFACTURER"],
-          as: "brands",
+          attributes: ["BRAND_NAME"],
+          include: [
+            {
+              model: ManufacturerModel,
+              through: {model : PricesModel , attributes: ["BASE_PRICE" , "PROFIT_PERCENTAGE"] },
+              as: "productcost",
+              attributes: ["MANUFACTURER_NAME"],
+            },
+          ],
         },
         {
           model: ProductSizes,
@@ -56,7 +73,7 @@ exports.getShirts = async (req, res) => {
       return res.status(Constants.StatusCodes.SuccessResponse._ok).json({
         Status: "Success",
         Message: "Successfully fetched all data",
-        Data: Shirts[0],
+        Data: Shirts,
       });
     } else {
       return res

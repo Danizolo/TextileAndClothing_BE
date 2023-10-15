@@ -13,7 +13,9 @@
 
 const { DataTypes } = require('sequelize')
 const mysqlDB = require('../config/database')
-const ShirtsModel = require('./shirts')
+const ManufacturerModel = require('./manufacturers')
+const PriceModel = require('./prices')
+
 
 const sequelize = mysqlDB;
 
@@ -46,7 +48,17 @@ const Brands = sequelize.define(
     }
 )
 
-
+ManufacturerModel.belongsToMany(Brands, {
+    through: PriceModel,
+    foreignKey: "MANUFACTURER_ID",
+    as: 'productcost'
+  });
+  
+  Brands.belongsToMany(ManufacturerModel, {
+    through: PriceModel,
+    foreignKey: "BRAND_ID",
+    as: 'productcost'
+  });
 
 
 module.exports = Brands;
