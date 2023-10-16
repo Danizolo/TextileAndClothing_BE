@@ -15,7 +15,8 @@ const UserModel = require('../models/users')
 const Constants = require('../utilities/constants')
 const UserPermissionModel = require('../models/user_permissions')
 const PermissionModel = require('../models/permissions')
-
+const UserSession = require('../models/user_sessions')
+const LoginHistory = require('../models/login_histories')
 
 exports.registration = async (req, res) => {
     try {
@@ -66,7 +67,7 @@ exports.loggingIn = async (req, res) => {
                 CURRENT_PASSWORD: paraMeters.passWord,
                 IS_ACTIVE: Constants.Status._active
             },
-            attributes: ['NAME', 'MAIL', 'PHONE_NUMBER', 'AGE', 'AADHAR', 'USER_TYPE', 'IS_ADMIN'],
+            attributes: ['USER_ID', 'NAME', 'MAIL', 'PHONE_NUMBER', 'AGE', 'AADHAR', 'USER_TYPE', 'IS_ADMIN'],
             include: [{
                 model: UserPermissionModel,
                 include: [{
@@ -81,17 +82,36 @@ exports.loggingIn = async (req, res) => {
 
 
 
+
+
         if (authenticateUser) {
 
-           return res.status(Constants.StatusCodes.SuccessResponse._ok).json({
-                Status: 'Success',
-                Message: 'Successfully Authenticated...',
-                Data: authenticateUser
+           const _date = new Date();
+           const _istTime = _date.toLocaleTimeString('en',
+                 { timeStyle: 'short', hour12: true, timeZone: 'Asia/Kolkata'});
 
-            })
+            const updateSession = await UserSession.update({ IS_LOGGING_IN: 1 }, { where: { USER_ID: authenticateUser.USER_ID } });
+            const insertHistory = await LoginHistory.create({ 
+                USER_ID: authenticateUser.USER_ID,
+                DATE: _date,
+                LOGIN_AT: _istTime
+            });
+
+
+            if (updateSession && insertHistory) {
+                return res.status(Constants.StatusCodes.SuccessResponse._ok).json({
+                    Status: 'Success',
+                    Message: 'Successfully Authenticated...',
+                    Data: authenticateUser
+                });
+            }
+
+            
+
+
 
         } else {
-           return res.status(Constants.StatusCodes.ClientErrorResponse._badRequest).json({
+            return res.status(Constants.StatusCodes.ClientErrorResponse._badRequest).json({
                 Status: 'Error',
             })
         }

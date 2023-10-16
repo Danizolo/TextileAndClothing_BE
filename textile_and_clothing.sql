@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 15, 2023 at 06:55 PM
+-- Generation Time: Oct 16, 2023 at 03:09 PM
 -- Server version: 10.4.28-MariaDB
--- PHP Version: 8.0.28
+-- PHP Version: 8.2.4
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -66,6 +66,29 @@ INSERT INTO `colors` (`COLOR_ID`, `DEFAULT_COLOR`, `createdAt`, `updatedAt`) VAL
 (3, 'Navy Blue', '2023-10-14 16:38:05', '2023-10-14 16:38:05'),
 (4, 'Black', '2023-10-14 16:38:05', '2023-10-14 16:38:05'),
 (5, 'Brown', '2023-10-14 16:38:05', '2023-10-14 16:38:05');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `login_histories`
+--
+
+CREATE TABLE `login_histories` (
+  `LOGIN_HISTORY_ID` int(11) NOT NULL,
+  `USER_ID` int(11) NOT NULL,
+  `DATE` date NOT NULL,
+  `LOGIN_AT` time DEFAULT NULL,
+  `LOGOUT_AT` timestamp NULL DEFAULT NULL,
+  `createdAt` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updatedAt` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `login_histories`
+--
+
+INSERT INTO `login_histories` (`LOGIN_HISTORY_ID`, `USER_ID`, `DATE`, `LOGIN_AT`, `LOGOUT_AT`, `createdAt`, `updatedAt`) VALUES
+(1, 2, '2023-10-16', '06:26:00', NULL, '2023-10-16 12:56:57', '2023-10-16 12:56:57');
 
 -- --------------------------------------------------------
 
@@ -304,6 +327,30 @@ INSERT INTO `user_permissions` (`USER_PERMISSION_ID`, `USER_TABLE_ID`, `PERMISSI
 (9, 2, 4, '2023-10-14 12:01:53', '2023-10-14 12:01:53'),
 (10, 3, 4, '2023-10-14 12:02:09', '2023-10-14 12:02:09');
 
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `user_sessions`
+--
+
+CREATE TABLE `user_sessions` (
+  `USER_SESSION_ID` int(11) NOT NULL,
+  `USER_ID` int(11) NOT NULL,
+  `IS_LOGGING_IN` tinyint(4) NOT NULL,
+  `createdAt` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updatedAt` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `user_sessions`
+--
+
+INSERT INTO `user_sessions` (`USER_SESSION_ID`, `USER_ID`, `IS_LOGGING_IN`, `createdAt`, `updatedAt`) VALUES
+(1, 1, 0, '2023-10-16 06:07:44', '2023-10-16 06:07:44'),
+(2, 2, 1, '2023-10-16 06:07:44', '2023-10-16 12:56:57'),
+(3, 3, 0, '2023-10-16 06:07:56', '2023-10-16 06:07:56'),
+(4, 4, 0, '2023-10-16 06:07:56', '2023-10-16 06:07:56');
+
 --
 -- Indexes for dumped tables
 --
@@ -319,6 +366,12 @@ ALTER TABLE `brands`
 --
 ALTER TABLE `colors`
   ADD PRIMARY KEY (`COLOR_ID`);
+
+--
+-- Indexes for table `login_histories`
+--
+ALTER TABLE `login_histories`
+  ADD PRIMARY KEY (`LOGIN_HISTORY_ID`);
 
 --
 -- Indexes for table `manufacturers`
@@ -375,6 +428,12 @@ ALTER TABLE `user_permissions`
   ADD PRIMARY KEY (`USER_PERMISSION_ID`);
 
 --
+-- Indexes for table `user_sessions`
+--
+ALTER TABLE `user_sessions`
+  ADD PRIMARY KEY (`USER_SESSION_ID`);
+
+--
 -- AUTO_INCREMENT for dumped tables
 --
 
@@ -389,6 +448,12 @@ ALTER TABLE `brands`
 --
 ALTER TABLE `colors`
   MODIFY `COLOR_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT for table `login_histories`
+--
+ALTER TABLE `login_histories`
+  MODIFY `LOGIN_HISTORY_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `manufacturers`
@@ -443,6 +508,12 @@ ALTER TABLE `users`
 --
 ALTER TABLE `user_permissions`
   MODIFY `USER_PERMISSION_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+
+--
+-- AUTO_INCREMENT for table `user_sessions`
+--
+ALTER TABLE `user_sessions`
+  MODIFY `USER_SESSION_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
