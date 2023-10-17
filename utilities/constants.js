@@ -38,7 +38,11 @@ exports.StatusCodes = {
         _created: 201
     },
     ClientErrorResponse:{
-        _badRequest: 400
+        _badRequest: 400,
+        _notFound: 404
+    },
+    ServerErrorResponse: {
+        _internalError : 500
     }
 
 }
@@ -47,6 +51,18 @@ exports.StatusCodes = {
 exports.Status = {
     _active: 1,
     _inActive: 0
+}
+
+
+
+exports.dateToday = () => {
+    return new Date();
+}
+
+
+exports.istTimeNow = (date) => {
+    return date.toLocaleTimeString('en',
+    { timeStyle: 'short', hour12: true, timeZone: 'Asia/Kolkata' })
 }
 
 

@@ -14,6 +14,7 @@ const express = require('express')
 const application = express();
 const port = 3999;
 const cors = require('cors')
+require("dotenv").config();
 const bodyParser = require('body-parser');
 const AuthenticateRoute = require('./routes/authentication_route')
 const ProductRoute = require('./routes/product_route')
