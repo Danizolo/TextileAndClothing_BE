@@ -1,15 +1,4 @@
-/**
-    * @description      : 
-    * @author           : DHANUSH
-    * @group            : 
-    * @created          : 14/10/2023 - 23:36:22
-    * 
-    * MODIFICATION LOG
-    * - Version         : 1.0.0
-    * - Date            : 14/10/2023
-    * - Author          : DHANUSH
-    * - Modification    : 
-**/
+
 
 const UserModel = require('../models/users')
 const Constants = require('../utilities/constants')
@@ -31,20 +20,25 @@ exports.updateUserSessionAndHistory = async (userId, res) => {
 
 
         const updateSession = await UserSession.update({ IS_LOGGING_IN: Constants.Status._active }, { where: { USER_ID: userId } });
-        const insertHistory = await LoginHistory.create({
-            USER_ID: userId,
-            DATE: Constants.dateToday(),
-            LOGIN_AT: Constants.istTimeNow(date)
-        });
 
-        if (updateSession && insertHistory) {
-            console.log('true');
-            return true;
+        if (updateSession) {
+            const insertHistory = await LoginHistory.create({
+                USER_ID: userId,
+                DATE: Constants.dateToday(),
+                LOGIN_AT: Constants.istTimeNow(date)
+            });
 
+
+            if (insertHistory) {
+                return true;
+
+            } else {
+                const reUpdateSession = await UserSession.update({ IS_LOGGING_IN: Constants.Status._inActive }, { where: { USER_ID: userId } });
+                return false;
+            }
         } else {
-            console.log("error");
             return false;
-            // reverse session and history logic will goes here
+
         }
 
     } catch (err) {
@@ -56,8 +50,6 @@ exports.updateUserSessionAndHistory = async (userId, res) => {
     }
 
 
-
-
 }
 
 
@@ -67,9 +59,7 @@ exports.signIn = async (res, params) => {
 
         const _user = await UserModel.findOne({
             where: {
-                MAIL: params.mail,
-                CURRENT_PASSWORD: params.passWord,
-                IS_ACTIVE: Constants.Status._active
+                MAIL: params.mail
             },
             attributes: ['USER_ID', 'NAME', 'MAIL', 'PHONE_NUMBER', 'AGE', 'AADHAR', 'USER_TYPE', 'IS_ADMIN'],
             include: [{
@@ -83,36 +73,43 @@ exports.signIn = async (res, params) => {
             }]
         });
 
-        const jwtToken = jwt.sign(
-            { user_id: _user.USER_ID },
-            ENV.SECRET_ACCESS_TOKEN
-        );
 
         if (_user) {
 
-            const userUpdated = this.updateUserSessionAndHistory(_user.USER_ID, res);
+            const jwtToken = jwt.sign(
+                { user_id: _user.USER_ID },
+                ENV.SECRET_ACCESS_TOKEN
+            );
 
-            if (await userUpdated) {
-                res.status(Constants.StatusCodes.SuccessResponse._ok).json({
-                    Status: 'Success',
-                    Message: 'Successfully Authenticated...',
-                    Data: _user,
-                    Token: jwtToken
-                });
-            } else {
+            if (jwtToken) {
+                const userUpdated = this.updateUserSessionAndHistory(_user.USER_ID, res);
+
+                if (userUpdated) {
+                    res.status(Constants.StatusCodes.SuccessResponse._ok).json({
+                        Status: 'Success',
+                        Message: 'Successfully Authenticated...',
+                        Data: _user,
+                        Token: jwtToken,
+                    });
+                } else {
+                    res.status(Constants.StatusCodes.ClientErrorResponse._badRequest).json({
+                        Status: 'Error',
+                    })
+                }
+
+            }else {
                 res.status(Constants.StatusCodes.ClientErrorResponse._badRequest).json({
                     Status: 'Error',
+                    Message: 'Failed in Token generating, Please Login again...'
                 })
+
             }
 
-
-
-        } else {
-            res.status(Constants.StatusCodes.ClientErrorResponse._notFound).json({
-                Status: false,
-                Message: 'User Not Found...'
+        }else {
+            res.status(Constants.StatusCodes.ClientErrorResponse._badRequest).json({
+                Status: 'Error',
+                Message: 'Authentication failed, Please try again later...'
             })
-
         }
 
     } catch (err) {
@@ -180,15 +177,24 @@ exports.authenticate = async (req, res) => {
 
         const paraMeters = req.body;
 
-        const _userExists = ApplicationServices.checkUserExists(paraMeters);
+        const _userExists = await ApplicationServices.checkUserEmailExists(paraMeters);
+        const _passWordExists = await ApplicationServices.checkUserPassWordExists(paraMeters);
 
         if (_userExists) {
-            this.signIn(res, paraMeters);
+            if (_passWordExists) {
+                this.signIn(res, paraMeters);
+
+            } else {
+                res.status(Constants.StatusCodes.ClientErrorResponse._badRequest).json({
+                    Status: false,
+                    Message: 'Incorrect Password...'
+                })
+            }
 
         } else {
             res.status(Constants.StatusCodes.ClientErrorResponse._badRequest).json({
                 Status: false,
-                Message: 'User not Registered...'
+                Message: 'User Not Found'
             })
         }
 

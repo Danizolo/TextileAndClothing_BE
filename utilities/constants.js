@@ -67,18 +67,10 @@ exports.istTimeNow = (date) => {
 
 
 
-// const student = {
-//     firstName: 'Monica',
+exports.student = {
+    firstName: null,
     
-//     //accessor property(setter)
-//     set changeName(newName) {
-//         this.firstName = newName;
-//     }
-// };
-
-// console.log(student.firstName); // Monica
-
-// // change(set) object property using a setter
-// student.changeName = 'Sarah';
-
-// console.log(student.firstName); // Sarah
+    set changeName(newName) {
+        this.firstName = newName;
+    }
+};
