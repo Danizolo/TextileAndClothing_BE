@@ -17,6 +17,8 @@ const sequelize = mysqlDB;
 const ProductSizes = require("./product_sizes");
 const BrandsModel = require("./brands");
 const ProductColors = require("./product_colors");
+const AllProducts = require('../models/all_products')
+const Colors = require('./colors')
 
 const Shirts = sequelize.define("shirts", {
   SHIRT_ID: {
@@ -74,5 +76,21 @@ Shirts.hasMany(ProductColors, {
   foreignKey: "SHIRT_TABLE_ID",
   as: "availableColors",
 });
+
+// Shirts.hasMany(AllProducts, { foreignKey: "PRODUCT_ID" });
+
+// Shirts.belongsToMany(Colors, {
+//   through: AllProducts,
+//   foreignKey: "PRODUCT_ID",
+//   as: 'productImages'
+// });
+
+//   Colors.belongsToMany(Shirts, {
+//     through: AllProducts,
+//     foreignKey: "COLOR_ID",
+//     as: 'productImages'
+//   });
+
+
 
 module.exports = Shirts;

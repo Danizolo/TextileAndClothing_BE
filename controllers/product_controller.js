@@ -20,10 +20,12 @@ const Colors = require("../models/colors");
 const Sizes = require("../models/sizes");
 const ManufacturerModel = require("../models/manufacturers");
 const PricesModel = require("../models/prices");
+const ProductImagesModel = require("../models/product_images");
+const AllProducts = require('../models/all_products')
 
 exports.getShirts = async (req, res) => {
   try {
-    const Shirts = await ShirtModel.findAll({
+    const Shirts =  ShirtModel.findAll({
       attributes: [
         "SHIRT_ID",
         "NAME",
@@ -40,7 +42,7 @@ exports.getShirts = async (req, res) => {
           include: [
             {
               model: ManufacturerModel,
-              through: {model : PricesModel , attributes: ["BASE_PRICE" , "PROFIT_PERCENTAGE"] },
+              through: { model: PricesModel, attributes: ["BASE_PRICE", "PROFIT_PERCENTAGE"] },
               as: "productcost",
               attributes: ["MANUFACTURER_NAME"],
             },
@@ -63,6 +65,20 @@ exports.getShirts = async (req, res) => {
               model: Colors,
               as: "availableColors",
               attributes: ["DEFAULT_COLOR"],
+              include: [
+                {
+                  model: ShirtModel,
+                  attributes: ["SHIRT_ID"],
+                  include: [
+                    {
+                      model: AllProducts,
+                      through: {model : ProductImagesModel , attributes: ["IMG_NAME"] },
+                      as: "productImages",
+                      attributes: ["SHIRT_ID"],
+                    },
+                  ],
+                },
+              ],
             },
           ],
         },
@@ -82,5 +98,5 @@ exports.getShirts = async (req, res) => {
           Status: "Error",
         });
     }
-  } catch (error) {}
+  } catch (error) { }
 };

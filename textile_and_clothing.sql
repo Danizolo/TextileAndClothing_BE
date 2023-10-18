@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 16, 2023 at 03:09 PM
+-- Generation Time: Oct 18, 2023 at 03:03 PM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -20,6 +20,28 @@ SET time_zone = "+00:00";
 --
 -- Database: `textile_and_clothing`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `all_products`
+--
+
+CREATE TABLE `all_products` (
+  `ID` int(11) NOT NULL,
+  `PRODUCT_ID` int(22) NOT NULL,
+  `createdAt` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updatedAt` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `all_products`
+--
+
+INSERT INTO `all_products` (`ID`, `PRODUCT_ID`, `createdAt`, `updatedAt`) VALUES
+(1, 1, '2023-10-18 12:06:20', '2023-10-18 12:06:20'),
+(2, 2, '2023-10-18 12:06:20', '2023-10-18 12:06:20'),
+(3, 3, '2023-10-18 12:06:20', '2023-10-18 12:06:20');
 
 -- --------------------------------------------------------
 
@@ -88,7 +110,14 @@ CREATE TABLE `login_histories` (
 --
 
 INSERT INTO `login_histories` (`LOGIN_HISTORY_ID`, `USER_ID`, `DATE`, `LOGIN_AT`, `LOGOUT_AT`, `createdAt`, `updatedAt`) VALUES
-(1, 2, '2023-10-16', '06:26:00', NULL, '2023-10-16 12:56:57', '2023-10-16 12:56:57');
+(1, 2, '2023-10-18', '10:13:00', NULL, '2023-10-18 04:43:45', '2023-10-18 04:43:45'),
+(2, 2, '2023-10-18', '10:14:00', NULL, '2023-10-18 04:44:04', '2023-10-18 04:44:04'),
+(3, 2, '2023-10-18', '10:14:00', NULL, '2023-10-18 04:44:47', '2023-10-18 04:44:47'),
+(4, 2, '2023-10-18', '10:16:00', NULL, '2023-10-18 04:46:26', '2023-10-18 04:46:26'),
+(5, 2, '2023-10-18', '10:17:00', NULL, '2023-10-18 04:47:23', '2023-10-18 04:47:23'),
+(6, 2, '2023-10-18', '10:23:00', NULL, '2023-10-18 04:53:15', '2023-10-18 04:53:15'),
+(7, 2, '2023-10-18', '11:58:00', NULL, '2023-10-18 06:28:03', '2023-10-18 06:28:03'),
+(8, 2, '2023-10-18', '12:11:00', NULL, '2023-10-18 06:41:48', '2023-10-18 06:41:48');
 
 -- --------------------------------------------------------
 
@@ -187,6 +216,33 @@ INSERT INTO `product_colors` (`ID`, `SHIRT_TABLE_ID`, `COLOR_TABLE_ID`, `created
 (4, 2, 2, '2023-10-15 05:25:19', '2023-10-15 05:25:19'),
 (5, 2, 5, '2023-10-15 05:25:19', '2023-10-15 05:25:19'),
 (6, 1, 5, '2023-10-15 05:25:19', '2023-10-15 05:25:19');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `product_images`
+--
+
+CREATE TABLE `product_images` (
+  `PRODUCT_IMAGE_ID` int(11) NOT NULL,
+  `PRODUCT_ID` int(11) NOT NULL,
+  `COLOR_ID` int(11) NOT NULL,
+  `IMG_NAME` varchar(55) NOT NULL,
+  `createdAt` timestamp NULL DEFAULT current_timestamp(),
+  `updatedAt` datetime DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `product_images`
+--
+
+INSERT INTO `product_images` (`PRODUCT_IMAGE_ID`, `PRODUCT_ID`, `COLOR_ID`, `IMG_NAME`, `createdAt`, `updatedAt`) VALUES
+(1, 1, 1, 'img1.jpg', '2023-10-18 11:59:32', '2023-10-18 07:59:32'),
+(2, 1, 1, 'img2.jpg', '2023-10-18 11:59:32', '2023-10-18 07:59:32'),
+(3, 1, 1, 'img3.jpg', '2023-10-18 11:59:32', '2023-10-18 07:59:32'),
+(4, 1, 1, 'img4.jpg', '2023-10-18 11:59:32', '2023-10-18 07:59:32'),
+(5, 1, 1, 'img5.jpg', '2023-10-18 11:59:32', '2023-10-18 07:59:32'),
+(6, 1, 1, 'img6.jpg', '2023-10-18 11:59:32', '2023-10-18 07:59:32');
 
 -- --------------------------------------------------------
 
@@ -347,13 +403,19 @@ CREATE TABLE `user_sessions` (
 
 INSERT INTO `user_sessions` (`USER_SESSION_ID`, `USER_ID`, `IS_LOGGING_IN`, `createdAt`, `updatedAt`) VALUES
 (1, 1, 0, '2023-10-16 06:07:44', '2023-10-16 06:07:44'),
-(2, 2, 1, '2023-10-16 06:07:44', '2023-10-16 12:56:57'),
+(2, 2, 1, '2023-10-16 06:07:44', '2023-10-18 06:41:48'),
 (3, 3, 0, '2023-10-16 06:07:56', '2023-10-16 06:07:56'),
 (4, 4, 0, '2023-10-16 06:07:56', '2023-10-16 06:07:56');
 
 --
 -- Indexes for dumped tables
 --
+
+--
+-- Indexes for table `all_products`
+--
+ALTER TABLE `all_products`
+  ADD PRIMARY KEY (`ID`);
 
 --
 -- Indexes for table `brands`
@@ -398,6 +460,12 @@ ALTER TABLE `product_colors`
   ADD PRIMARY KEY (`ID`);
 
 --
+-- Indexes for table `product_images`
+--
+ALTER TABLE `product_images`
+  ADD PRIMARY KEY (`PRODUCT_IMAGE_ID`);
+
+--
 -- Indexes for table `product_sizes`
 --
 ALTER TABLE `product_sizes`
@@ -438,6 +506,12 @@ ALTER TABLE `user_sessions`
 --
 
 --
+-- AUTO_INCREMENT for table `all_products`
+--
+ALTER TABLE `all_products`
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
 -- AUTO_INCREMENT for table `brands`
 --
 ALTER TABLE `brands`
@@ -453,7 +527,7 @@ ALTER TABLE `colors`
 -- AUTO_INCREMENT for table `login_histories`
 --
 ALTER TABLE `login_histories`
-  MODIFY `LOGIN_HISTORY_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `LOGIN_HISTORY_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `manufacturers`
@@ -478,6 +552,12 @@ ALTER TABLE `prices`
 --
 ALTER TABLE `product_colors`
   MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+
+--
+-- AUTO_INCREMENT for table `product_images`
+--
+ALTER TABLE `product_images`
+  MODIFY `PRODUCT_IMAGE_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `product_sizes`

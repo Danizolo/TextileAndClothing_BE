@@ -1,3 +1,6 @@
+
+
+
 /**
     * @description      : 
     * @author           : DHANUSH
@@ -15,19 +18,19 @@ const { DataTypes } = require('sequelize')
 const mysqlDB = require('../config/database')
 const sequelize = mysqlDB;
 const ShirtModel = require('./shirts')
-const AllProducts = require('./all_products')
+const Colors = require('./colors')
 
-const Colors = sequelize.define(
-    'colors',
+const AllProducts = sequelize.define(
+    'all_products',
     {
-        COLOR_ID: {
+        ID: {
             type: DataTypes.INTEGER(11),
             primaryKey: true,
             autoIncrement: true
 
         },
-        DEFAULT_COLOR:{
-            type: DataTypes.STRING(55),
+        PRODUCT_ID:{
+            type: DataTypes.INTEGER(22),
             allowNull: false
         },
         createdAt: {
@@ -44,4 +47,4 @@ const Colors = sequelize.define(
 
 
 
-module.exports = Colors;
+module.exports = AllProducts;
