@@ -100,7 +100,7 @@ exports.signIn = async (res, params) => {
             }else {
                 res.status(Constants.StatusCodes.ClientErrorResponse._badRequest).json({
                     Status: 'Error',
-                    Message: 'Failed in Token generating, Please Login again...'
+                    Message: 'Failed in Token generation, Please Login again...'
                 })
 
             }
