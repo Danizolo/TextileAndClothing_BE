@@ -25,7 +25,7 @@ const AllProducts = require('../models/all_products')
 
 exports.getShirts = async (req, res) => {
   try {
-    const Shirts =  ShirtModel.findAll({
+    const Shirts = await ShirtModel.findAll({
       attributes: [
         "SHIRT_ID",
         "NAME",
@@ -36,6 +36,7 @@ exports.getShirts = async (req, res) => {
         "QUANTITY",
       ],
       include: [
+        
         {
           model: BrandsModel,
           attributes: ["BRAND_NAME"],
@@ -64,23 +65,23 @@ exports.getShirts = async (req, res) => {
             {
               model: Colors,
               as: "availableColors",
-              attributes: ["DEFAULT_COLOR"],
-              include: [
-                {
-                  model: ShirtModel,
-                  attributes: ["SHIRT_ID"],
-                  include: [
-                    {
-                      model: AllProducts,
-                      through: {model : ProductImagesModel , attributes: ["IMG_NAME"] },
-                      as: "productImages",
-                      attributes: ["SHIRT_ID"],
-                    },
-                  ],
-                },
-              ],
+              attributes: ["DEFAULT_COLOR"]
             },
           ],
+        },
+        {
+          model: AllProducts,
+          as: 'images',
+          attributes: ["PRODUCT_ID"],
+          include: [
+            {
+              model: Colors,
+              attributes: ["DEFAULT_COLOR"],
+              through: { model: ProductImagesModel, attributes: ["IMG_NAME"] },
+              as: 'productimages',
+            }
+          ],
+
         },
       ],
     });

@@ -19,6 +19,7 @@ const BrandsModel = require("./brands");
 const ProductColors = require("./product_colors");
 const AllProducts = require('../models/all_products')
 const Colors = require('./colors')
+const ProductImagesModel = require('./product_images')
 
 const Shirts = sequelize.define("shirts", {
   SHIRT_ID: {
@@ -77,19 +78,20 @@ Shirts.hasMany(ProductColors, {
   as: "availableColors",
 });
 
-// Shirts.hasMany(AllProducts, { foreignKey: "PRODUCT_ID" });
+Shirts.hasOne(AllProducts, {foreignKey: "PRODUCT_ID", as:'images' })
 
-// Shirts.belongsToMany(Colors, {
-//   through: AllProducts,
-//   foreignKey: "PRODUCT_ID",
-//   as: 'productImages'
-// });
 
-//   Colors.belongsToMany(Shirts, {
-//     through: AllProducts,
-//     foreignKey: "COLOR_ID",
-//     as: 'productImages'
-//   });
+AllProducts.belongsToMany(Colors, {
+  through: ProductImagesModel,
+  foreignKey: "PRODUCT_ID",
+  as: 'productimages'
+});
+
+Colors.belongsToMany(AllProducts, {
+  through: ProductImagesModel,
+  foreignKey: "COLOR_ID",
+  as: 'productimages'
+});
 
 
 
