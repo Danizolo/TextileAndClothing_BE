@@ -78,7 +78,7 @@ Shirts.hasMany(ProductColors, {
   as: "availableColors",
 });
 
-Shirts.hasOne(AllProducts, {foreignKey: "PRODUCT_ID", as:'images' })
+Shirts.hasOne(AllProducts, { foreignKey: "PRODUCT_ID", as: 'images' })
 
 
 AllProducts.belongsToMany(Colors, {
@@ -86,6 +86,7 @@ AllProducts.belongsToMany(Colors, {
   foreignKey: "PRODUCT_ID",
   as: 'productimages'
 });
+
 
 Colors.belongsToMany(AllProducts, {
   through: ProductImagesModel,

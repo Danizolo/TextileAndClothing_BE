@@ -76,6 +76,7 @@ exports.getShirts = async (req, res) => {
           include: [
             {
               model: Colors,
+              unique: false,
               attributes: ["DEFAULT_COLOR"],
               through: { model: ProductImagesModel, attributes: ["IMG_NAME"] },
               as: 'productimages',

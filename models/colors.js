@@ -16,6 +16,8 @@ const mysqlDB = require('../config/database')
 const sequelize = mysqlDB;
 const ShirtModel = require('./shirts')
 const AllProducts = require('./all_products')
+const ProductImagesModel = require('./product_images')
+
 
 const Colors = sequelize.define(
     'colors',
@@ -42,6 +44,7 @@ const Colors = sequelize.define(
     }
 )
 
+// Colors.hasMany(ProductImagesModel, {foreignKey: 'COLOR_ID' });
 
 
 module.exports = Colors;
