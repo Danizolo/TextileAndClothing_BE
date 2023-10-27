@@ -11,6 +11,9 @@
  * - Modification    :
  **/
 
+const mysqlDB = require("../config/database");
+const sequelize = mysqlDB;
+
 const ShirtModel = require("../models/shirts");
 const BrandsModel = require("../models/brands");
 const Constants = require("../utilities/constants");
@@ -36,7 +39,7 @@ exports.getShirts = async (req, res) => {
         "QUANTITY",
       ],
       include: [
-        
+
         {
           model: BrandsModel,
           attributes: ["BRAND_NAME"],
@@ -76,13 +79,11 @@ exports.getShirts = async (req, res) => {
           include: [
             {
               model: Colors,
-              unique: false,
               attributes: ["DEFAULT_COLOR"],
               through: { model: ProductImagesModel, attributes: ["IMG_NAME"] },
-              as: 'productimages',
+              as: 'productimages'
             }
           ],
-
         },
       ],
     });
