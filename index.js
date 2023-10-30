@@ -30,7 +30,7 @@ application.use(bodyParser.json());
 
 application.listen(port, () => {
     console.log("Application running successfully on port " + port);
-})
+});
 
 application.get('/' , (req, res) => {
     res.send('Hello world')

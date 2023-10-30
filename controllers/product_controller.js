@@ -24,7 +24,7 @@ const Sizes = require("../models/sizes");
 const ManufacturerModel = require("../models/manufacturers");
 const PricesModel = require("../models/prices");
 const ProductImagesModel = require("../models/product_images");
-const AllProducts = require('../models/all_products')
+const AllProducts = require("../models/all_products");
 
 exports.getShirts = async (req, res) => {
   try {
@@ -39,14 +39,16 @@ exports.getShirts = async (req, res) => {
         "QUANTITY",
       ],
       include: [
-
         {
           model: BrandsModel,
           attributes: ["BRAND_NAME"],
           include: [
             {
               model: ManufacturerModel,
-              through: { model: PricesModel, attributes: ["BASE_PRICE", "PROFIT_PERCENTAGE"] },
+              through: {
+                model: PricesModel,
+                attributes: ["BASE_PRICE", "PROFIT_PERCENTAGE"],
+              },
               as: "productcost",
               attributes: ["MANUFACTURER_NAME"],
             },
@@ -68,38 +70,36 @@ exports.getShirts = async (req, res) => {
             {
               model: Colors,
               as: "availableColors",
-              attributes: ["DEFAULT_COLOR"]
+              attributes: ["DEFAULT_COLOR"],
             },
           ],
         },
         {
           model: AllProducts,
-          as: 'images',
+          as: "images",
           attributes: ["PRODUCT_ID"],
           include: [
             {
               model: Colors,
               attributes: ["DEFAULT_COLOR"],
               through: { model: ProductImagesModel, attributes: ["IMG_NAME"] },
-              as: 'productimages'
-            }
+              as: "productimages",
+            },
           ],
         },
       ],
     });
 
     if (Shirts) {
-      return res.status(Constants.StatusCodes.SuccessResponse._ok).json({
+      res.status(Constants.StatusCodes.SuccessResponse._ok).json({
         Status: "Success",
         Message: "Successfully fetched all data",
         Data: Shirts,
       });
     } else {
-      return res
-        .status(Constants.StatusCodes.ClientErrorResponse._badRequest)
-        .json({
-          Status: "Error",
-        });
+      res.status(Constants.StatusCodes.ClientErrorResponse._badRequest).json({
+        Status: "Error",
+      });
     }
-  } catch (error) { }
+  } catch (error) {}
 };

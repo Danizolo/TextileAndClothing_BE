@@ -24,7 +24,7 @@ const ProductImagesModel = require('./product_images')
 const AllProducts = sequelize.define(
     'all_products',
     {
-        ALL_PRODUCT_ID: {
+        ID: {
             type: DataTypes.INTEGER(11),
             primaryKey: true,
             autoIncrement: true
