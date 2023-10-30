@@ -22,7 +22,7 @@ const ProductSizes = sequelize.define("product_sizes", {
     primaryKey: true,
     autoIncrement: true,
   },
-  SHIRT_TABLE_ID: {
+  PRODUCT_ID: {
     type: DataTypes.INTEGER(11),
     allowNull: false,
   },
