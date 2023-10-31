@@ -32,7 +32,7 @@ const Brands = sequelize.define(
             type: DataTypes.STRING(55),
             allowNull: false
         },
-        MANUFACTURER:{
+        MANUFACTURER_TABLE_ID:{
             type: DataTypes.STRING(155),
             allowNull: false
         },

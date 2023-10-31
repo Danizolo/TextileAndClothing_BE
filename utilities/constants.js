@@ -39,7 +39,8 @@ exports.StatusCodes = {
     },
     ClientErrorResponse:{
         _badRequest: 400,
-        _notFound: 404
+        _notFound: 404,
+        _alreadyExists : 409
     },
     ServerErrorResponse: {
         _internalError : 500

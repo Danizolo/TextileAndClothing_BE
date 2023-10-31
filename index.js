@@ -17,7 +17,7 @@ const cors = require('cors')
 require("dotenv").config();
 const bodyParser = require('body-parser');
 const AuthenticateRoute = require('./routes/authentication_route')
-const AddProductRoute = require('./routes/admin/add_product_route');
+const MasterDataRoute = require('./routes/admin/master_data_route');
 const ProductRoute = require('./routes/product_route')
 
 application.use(cors({
@@ -38,7 +38,7 @@ application.get('/' , (req, res) => {
 
 application.use("/api", AuthenticateRoute);
 application.use("/users", ProductRoute);
-application.use("/api/admin/add", AddProductRoute);
+application.use("/api/admin/add", MasterDataRoute);
 
 
 
