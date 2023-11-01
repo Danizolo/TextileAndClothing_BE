@@ -9,8 +9,9 @@ exports.checkPermissionExists = async (params) => {
     const paraMeters = params;
 
     const permission = await PermissionModel.findOne({
-        where: { NAME: params.name, IS_ACTIVE: Constants.Status._active }
+        where: { NAME: paraMeters.name, IS_ACTIVE: Constants.Status._active }
     });
+
 
     if (permission) {
         return true;

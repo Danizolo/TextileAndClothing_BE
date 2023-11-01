@@ -141,7 +141,8 @@ exports.addPermission = async (req, res) => {
 
     const paraMeters = req.body;
 
-    const permissionExists = MasterDataServices.checkPermissionExists(paraMeters);
+    const permissionExists = await MasterDataServices.checkPermissionExists(paraMeters);
+
 
     if (permissionExists) {
       res.status(Constants.StatusCodes.ClientErrorResponse._alreadyExists).json({
@@ -151,7 +152,8 @@ exports.addPermission = async (req, res) => {
 
     } else {
       const addNewPermission = await PermissionModel.create({
-        NAME: paraMeters.name
+        NAME: paraMeters.name,
+        IS_ACTIVE : Constants.Status._active
       });
 
       if (addNewPermission) {
